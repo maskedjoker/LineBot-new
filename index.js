@@ -22,6 +22,13 @@ const config = {
     if (event.type !== "message" || event.message.type !== "text") {
         return Promise.resolve(null);
       }
+    const messages =  [{
+        type: 'text',
+        text: 'ごいごいすー'
+    }];
+    if (event.message.text == '一斉送信'){
+        client.broadcast(messages);
+    }
     return client.replyMessage(event.replyToken, {
       type: "text",
       text: event.message.text,
