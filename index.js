@@ -1,10 +1,10 @@
 import express from "express";
 import { Client, middleware } from "@line/bot-sdk";
 
-const fs = require('fs').promises;
-const path = require('path');
-const process = require('process');
-const {google} = require('googleapis');
+import fs from "fs"
+import path from "path";
+import process from "process";
+import { google } from "googleapis";
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
