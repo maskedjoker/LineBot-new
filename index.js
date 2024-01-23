@@ -61,7 +61,7 @@ const config = {
 
 
 async function uploadFiles(imageFile){
-const auth = await new google.auth.GoogleAuth({
+const auth = new google.auth.GoogleAuth({
       scopes: SCOPES,
       keyFile: CREDENTIALS_PATH,
     });
@@ -77,17 +77,19 @@ const auth = await new google.auth.GoogleAuth({
           body: imageFile //アップロードファイル名(img配下のtest.jpg)
       };
       console.log("ログえ");
-      await drive.files.create({
+      drive.files.create({
           resource: fileMetadata,
           media: media,
           fields: 'id'
         }, function (err, file) {
       if (err) {
+        console.log("ログお" + err);
           console.error(err);
-          console.log("ログお" + err);
+          
       } else {
+        console.log("ログか + file.data.id");
           console.log('File Id: ', file.data.id);  
-          console.log("ログか");
+          
       }
       });
     }
