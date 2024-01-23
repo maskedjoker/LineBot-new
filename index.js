@@ -63,7 +63,7 @@ const config = {
 async function uploadFiles(imageFile){
 const auth = new google.auth.GoogleAuth({
       scopes: SCOPES,
-      keyFile: path.join(__dirname, CREDENTIALS_PATH),
+      keyFile: CREDENTIALS_PATH,
     });
     console.log("ログう");
       const drive = google.drive({version: 'v3', auth});  
