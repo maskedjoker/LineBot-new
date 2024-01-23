@@ -11,7 +11,7 @@ const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const CREDENTIALS_PATH = processe.env.CREDENTIALS;
+const CREDENTIALS_PATH = process.env.CREDENTIALS;
 
 const config = {
     channelSecret: process.env.CHANNEL_SECRET,
