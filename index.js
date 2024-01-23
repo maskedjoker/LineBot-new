@@ -84,7 +84,7 @@ const auth = await new google.auth.GoogleAuth({
         }, function (err, file) {
       if (err) {
           console.error(err);
-          console.log("ログお");
+          console.log("ログお" + err);
       } else {
           console.log('File Id: ', file.data.id);  
           console.log("ログか");
