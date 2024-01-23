@@ -29,12 +29,12 @@ const config = {
   });
   
   app.listen(PORT);
-
-  function handleEvent(event) {
+  
+  async function handleEvent(event) {
 
     if(event.type == "image"){
-        const downloadPath = './image.png';
-        uploadFiles(downloadContent(event.message.id, downloadPath));
+        const imageStream = await client.getMessageContent(event.message.id);
+        uploadFiles(imageStream);
     }
 
     //if (event.type !== "message" || event.message.type !== "text") {
@@ -53,15 +53,7 @@ const config = {
     });
   }
 
-  function downloadContent(messageId, downloadPath) {
-    return client.getMessageContent(messageId)
-      .then((stream) => new Promise((resolve, reject) => {
-        const writable = fs.createWriteStream(downloadPath);
-        stream.pipe(writable);
-        stream.on('end', () => resolve(downloadPath));
-        stream.on('error', reject);
-      }));
-  }
+
 
 async function uploadFiles(imageFile){
 const auth = await new google.auth.GoogleAuth({
@@ -77,7 +69,7 @@ const auth = await new google.auth.GoogleAuth({
       const fs = require('fs');
       var media = {
           mimeType: 'image/jpeg', //アップロードファイル形式
-          body: fs.createReadStream(imageFile) //アップロードファイル名(img配下のtest.jpg)
+          body: imageFile //アップロードファイル名(img配下のtest.jpg)
       };
   
       drive.files.create({
