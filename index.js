@@ -32,7 +32,7 @@ const config = {
   
   async function handleEvent(event) {
     console.log("ログ0 " + event.message.id + event.type);
-    if(event.type == "image"){
+    if(event.message.type == "image"){
         console.log("ログ1 " + event.message.id);
         const imageStream = await client.getMessageContent(event.message.id);
         console.log("ログあ");
