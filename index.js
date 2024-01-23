@@ -11,7 +11,7 @@ const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
+const CREDENTIALS_PATH = processe.env.CREDENTIALS;
 
 const config = {
     channelSecret: process.env.CHANNEL_SECRET,
@@ -34,7 +34,9 @@ const config = {
 
     if(event.type == "image"){
         const imageStream = await client.getMessageContent(event.message.id);
-        uploadFiles(imageStream);
+        console.log("ログあ");
+        await uploadFiles(imageStream);
+        console.log("ログい");
     }
 
     //if (event.type !== "message" || event.message.type !== "text") {
@@ -60,27 +62,29 @@ const auth = await new google.auth.GoogleAuth({
       scopes: SCOPES,
       keyFile: CREDENTIALS_PATH,
     });
-
+    console.log("ログう");
       const drive = google.drive({version: 'v3', auth});  
       var fileMetadata = {
           name: 'mae.jpg', //アップロード後のファイル名
           parents: ['1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU'] //アップロードしたいディレクトリID
       };
-      const fs = require('fs');
+
       var media = {
           mimeType: 'image/jpeg', //アップロードファイル形式
           body: imageFile //アップロードファイル名(img配下のtest.jpg)
       };
-  
-      drive.files.create({
+      console.log("ログえ");
+      await drive.files.create({
           resource: fileMetadata,
           media: media,
           fields: 'id'
         }, function (err, file) {
       if (err) {
           console.error(err);
+          console.log("ログお");
       } else {
           console.log('File Id: ', file.data.id);  
+          console.log("ログか");
       }
       });
     }
