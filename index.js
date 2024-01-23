@@ -33,11 +33,13 @@ const config = {
   async function handleEvent(event) {
 
     if(event.type == "image"){
+        console.log("ログ1 " + event.message.id);
         const imageStream = await client.getMessageContent(event.message.id);
         console.log("ログあ");
         await uploadFiles(imageStream);
         console.log("ログい");
     }
+    console.log("ログ2");
 
     //if (event.type !== "message" || event.message.type !== "text") {
     //    return Promise.resolve(null);
@@ -49,6 +51,7 @@ const config = {
     if (event.message.text == '一斉送信'){
         client.broadcast(messages);
     }
+    console.log("ログ3");
     return client.replyMessage(event.replyToken, {
       type: "text",
       text: event.message.text,
