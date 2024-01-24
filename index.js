@@ -87,7 +87,7 @@ const auth = new google.auth.GoogleAuth({
     console.log("ログう");
       const drive = google.drive({version: 'v3', auth});  
       const imageName = new Date().toISOString+ '.jpg';
-      console.log("ログe" + name)
+      console.log("ログe" + imageName)
       var fileMetadata = {
           name: imageName, //アップロード後のファイル名
           parents: ['1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU'] //アップロードしたいディレクトリID
