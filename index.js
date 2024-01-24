@@ -91,8 +91,8 @@ const auth = new google.auth.GoogleAuth({
           mimeType: 'image/jpeg', //アップロードファイル形式
           body: imageFile //アップロードファイル名(img配下のtest.jpg)
       };
-      console.log("ログえ");
-      drive.files.create({
+      console.log("ログえ" + imageFile);
+      await drive.files.create({
           resource: fileMetadata,
           media: media,
           fields: 'id'
