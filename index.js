@@ -103,9 +103,10 @@ const auth = new google.auth.GoogleAuth({
           console.error(err);
           
       } else {
-        console.log("ログか + file.data.id");
+        console.log("ログか" + file.data.id);
           console.log('File Id: ', file.data.id);  
           
       }
       });
+      console.log("ログc");
     }
