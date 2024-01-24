@@ -83,7 +83,7 @@ const auth = new google.auth.GoogleAuth({
     console.log("ログう");
       const drive = google.drive({version: 'v3', auth});  
       var fileMetadata = {
-          name: 'ja.jpg', //アップロード後のファイル名
+          name: new Date().toISOString() + '.jpg', //アップロード後のファイル名
           parents: ['1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU'] //アップロードしたいディレクトリID
       };
 
@@ -99,7 +99,7 @@ const auth = new google.auth.GoogleAuth({
             media: media,
             fields: 'id'
           });
-          console.log("ログd" + res.data.id);
+          console.log("ログd");
       } catch (err) {
         console.log("ログc" + err);
       }
