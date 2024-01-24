@@ -83,7 +83,7 @@ const auth = new google.auth.GoogleAuth({
     console.log("ログう");
       const drive = google.drive({version: 'v3', auth});  
       var fileMetadata = {
-          name: 'mae.jpg', //アップロード後のファイル名
+          name: 'ja.jpg', //アップロード後のファイル名
           parents: ['1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU'] //アップロードしたいディレクトリID
       };
 
@@ -92,23 +92,16 @@ const auth = new google.auth.GoogleAuth({
           body: imageFile //アップロードファイル名(img配下のtest.jpg)
       };
       console.log("ログえ" + imageFile);
-      const res = drive.files.create({
-          resource: fileMetadata,
-          media: media,
-          fields: 'id'
-        });
-        
-    //     function (err, file) {
-    //         console.log("ログa")
-    //   if (err) {
-    //     console.log("ログお" + err);
-    //       console.error(err);
-          
-    //   } else {
-    //     console.log("ログか" + file.data.id);
-    //       console.log('File Id: ', file.data.id);  
-          
-    //   }
-    //   });
-      console.log("ログc" + res.data);
+
+      try {
+        const res = drive.files.create({
+            resource: fileMetadata,
+            media: media,
+            fields: 'id'
+          });
+          console.log("ログd" + res.data.id);
+      } catch (err) {
+        console.log("ログc" + err);
+      }
+      
     }
