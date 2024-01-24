@@ -96,17 +96,19 @@ const auth = new google.auth.GoogleAuth({
           resource: fileMetadata,
           media: media,
           fields: 'id'
-        }, function (err, file) {
-            console.log("ログa")
-      if (err) {
-        console.log("ログお" + err);
-          console.error(err);
+        });
+        
+    //     function (err, file) {
+    //         console.log("ログa")
+    //   if (err) {
+    //     console.log("ログお" + err);
+    //       console.error(err);
           
-      } else {
-        console.log("ログか" + file.data.id);
-          console.log('File Id: ', file.data.id);  
+    //   } else {
+    //     console.log("ログか" + file.data.id);
+    //       console.log('File Id: ', file.data.id);  
           
-      }
-      });
+    //   }
+    //   });
       console.log("ログc" + res.data);
     }
