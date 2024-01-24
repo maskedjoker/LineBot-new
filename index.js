@@ -61,11 +61,13 @@ const config = {
 
 
 async function uploadFiles(imageFile){
+    console.log("ログb" + CREDENTIALS_PATH);
 const auth = new google.auth.GoogleAuth({
       scopes: SCOPES,
       keyFile: CREDENTIALS_PATH,
     });
-    console.log("ログう");
+    
+    console.log("ログう " + auth.scopes + auth.keyFile);
       const drive = google.drive({version: 'v3', auth});  
       var fileMetadata = {
           name: 'mae.jpg', //アップロード後のファイル名
@@ -76,7 +78,7 @@ const auth = new google.auth.GoogleAuth({
           mimeType: 'image/jpeg', //アップロードファイル形式
           body: imageFile //アップロードファイル名(img配下のtest.jpg)
       };
-      console.log("ログえ " + auth.scopes + auth.keyFile);
+      console.log("ログえ");
       drive.files.create({
           resource: fileMetadata,
           media: media,
