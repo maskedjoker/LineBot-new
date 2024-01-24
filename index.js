@@ -38,6 +38,10 @@ const config = {
         console.log("ログあ");
         await uploadFiles(imageStream);
         console.log("ログい");
+        return client.replyMessage(event.replyToken, {
+            type: "text",
+            text: "画像をアップロードしました"
+          });
     }
     console.log("ログ2");
 
@@ -82,8 +86,10 @@ const auth = new google.auth.GoogleAuth({
     
     console.log("ログう");
       const drive = google.drive({version: 'v3', auth});  
+      const imageName = new Date().toISOString+ '.jpg';
+      console.log("ログe" + name)
       var fileMetadata = {
-          name: new Date().toISOString() + '.jpg', //アップロード後のファイル名
+          name: imageName, //アップロード後のファイル名
           parents: ['1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU'] //アップロードしたいディレクトリID
       };
 
