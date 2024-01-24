@@ -92,7 +92,7 @@ const auth = new google.auth.GoogleAuth({
           body: imageFile //アップロードファイル名(img配下のtest.jpg)
       };
       console.log("ログえ" + imageFile);
-      await drive.files.create({
+      const res = await drive.files.create({
           resource: fileMetadata,
           media: media,
           fields: 'id'
@@ -108,5 +108,5 @@ const auth = new google.auth.GoogleAuth({
           
       }
       });
-      console.log("ログc");
+      console.log("ログc" + res.data);
     }
