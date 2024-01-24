@@ -64,7 +64,7 @@ async function uploadFiles(imageFile){
     console.log("ログb" + CREDENTIALS_PATH);
 const auth = new google.auth.GoogleAuth({
       scopes: SCOPES,
-      keyFile: CREDENTIALS_PATH,
+      keyFile: path.join(__dirname, CREDENTIALS_PATH),
     });
     
     console.log("ログう " + auth.scopes + auth.keyFile);
