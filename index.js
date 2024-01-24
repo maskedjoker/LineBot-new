@@ -11,7 +11,7 @@ const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const CREDENTIALS_PATH =  "credentials.json";
+
 
 const config = {
     channelSecret: process.env.CHANNEL_SECRET,
@@ -61,13 +61,26 @@ const config = {
 
 
 async function uploadFiles(imageFile){
-    console.log("ログb" + CREDENTIALS_PATH);
+    const credentials = {
+        "type": "service_account",
+        "project_id": process.env.PROJECT_ID,
+        "private_key_id": process.env.PRIVATE_KEY_ID,
+        "private_key": process.env.PRIVATE_KEY,
+        "client_email": process.env.CLIENT_EMAIL,
+        "client_id": process.env.CLIENT_ID,
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": process.env.CLIENT_X509_CRERT_URL,
+        "universe_domain": "googleapis.com"
+      };
+    console.log("ログb");
 const auth = new google.auth.GoogleAuth({
       scopes: SCOPES,
-      keyFile: path.join(__dirname, CREDENTIALS_PATH),
+      credentials: credentials,
     });
     
-    console.log("ログう " + auth.scopes + auth.keyFile);
+    console.log("ログう");
       const drive = google.drive({version: 'v3', auth});  
       var fileMetadata = {
           name: 'mae.jpg', //アップロード後のファイル名
