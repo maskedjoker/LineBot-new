@@ -86,7 +86,7 @@ const auth = new google.auth.GoogleAuth({
     
     console.log("ログう");
       const drive = google.drive({version: 'v3', auth});  
-      const imageName = new Date().toISOString+ '.jpg';
+      const imageName = new Date().toISOString()+ '.jpg';
       console.log("ログe" + imageName)
       var fileMetadata = {
           name: imageName, //アップロード後のファイル名
