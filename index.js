@@ -82,6 +82,7 @@ const auth = new google.auth.GoogleAuth({
           media: media,
           fields: 'id'
         }, function (err, file) {
+            console.log("ログa")
       if (err) {
         console.log("ログお" + err);
           console.error(err);
