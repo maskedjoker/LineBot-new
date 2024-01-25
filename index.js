@@ -93,14 +93,14 @@ const auth = new google.auth.GoogleAuth({
       const folderMetaData = {
         name: folderName,
         mimeType: 'application/vnd.google-apps.folder',
-        parents: ['1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU']
-      }
+        parents: '1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU'
+      };
 
       console.log(folderName);
       const folderId = "";
       try {
         const file = await drive.files.create({
-            resource: folderMetadata,
+            resource: folderMetaData,
             fields: 'id',
           });
           folderId = file.data.id
