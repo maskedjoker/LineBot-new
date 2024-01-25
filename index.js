@@ -99,7 +99,7 @@ const auth = new google.auth.GoogleAuth({
       console.log(folderName);
       const folderId = "";
       try {
-        const file = await service.files.create({
+        const file = await drive.files.create({
             resource: folderMetadata,
             fields: 'id',
           });
