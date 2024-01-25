@@ -97,46 +97,63 @@ const auth = new google.auth.GoogleAuth({
       };
 
       console.log(folderName);
-      var folderId = "";
-      try {
-        const file = await drive.files.create({
-            resource: folderMetaData,
-            fields: 'id',
-          });
-          folderId = file.data.id
-          console.log('ログg', folderId);
-      } catch (err){
-        console.log("ログf" + err);
-      }
 
-      var media = {
-          mimeType: 'image/jpeg', //アップロードファイル形式
-          body: imageFile //アップロードファイル名(img配下のtest.jpg)
-      };
-      console.log("ログえ" + imageFile);
+      const newFolderName = folderName
 
-     try{
-        await drive.permissions.create({
-            fileId: folderId,
-            requestBody: {
-              role: "writer",
-              type: "user",
-              emailAddress: 'k.maezmac@gmail.com',
-            },
-            supportsAllDrives: true,
-            supportsTeamDrives: true,
-          });
-          console.log("ログ11111");
-        } catch (err) {
-            console.log("ログ22222" + err);
-          }
+  const FOLDER_ID = '1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU'; //ここにフォルダIDを指定
+  const params = {
+    q: `'${FOLDER_ID}' in parents and trashed = false`,
+  }
+  const res = await drive.files.list(params);
+  const exists = res.data.files.find(file => file.name === newFolderName);
 
+  console.log('ログ5555555', exists);
+  var folderId = "";
+  if(exists) {
+    folderId = exists.data.id;
+  } else {
+    
+    //フォルダ作成
+    try {
+      const file = await drive.files.create({
+          resource: folderMetaData,
+          fields: 'id',
+        });
+        folderId = file.data.id
+        console.log('ログg', folderId);
+    } catch (err){
+      console.log("ログf" + err);
+    }
 
-      var fileMetadata = {
+    //フォルダパーミッション追加
+   try{
+      await drive.permissions.create({
+          fileId: folderId,
+          requestBody: {
+            role: "writer",
+            type: "user",
+            emailAddress: 'k.maezmac@gmail.com',
+          },
+          supportsAllDrives: true,
+          supportsTeamDrives: true,
+        });
+        console.log("ログ11111");
+      } catch (err) {
+          console.log("ログ22222" + err);
+        }
+
+  }
+
+    // ファイルアップロード
+    var fileMetadata = {
         name: imageName, //アップロード後のファイル名
         parents: [folderId] //アップロードしたいディレクトリID
     };
-
+    var media = {
+        mimeType: 'image/jpeg', //アップロードファイル形式
+        body: imageFile //アップロードファイル名(img配下のtest.jpg)
+    };
+    console.log("ログえ" + imageFile);
     var fileId = "";
       try {
         const image = await drive.files.create({
@@ -149,21 +166,4 @@ const auth = new google.auth.GoogleAuth({
       } catch (err) {
         console.log("ログc" + err);
       }
-
-      
-    //   try{
-    //     await drive.permissions.create({
-    //         fileId: fileId,
-    //         requestBody: {
-    //           role: "reader",
-    //           type: "anyone",
-    //         },
-    //         supportsAllDrives: true,
-    //         supportsTeamDrives: true,
-    //       });
-    //       console.log("ログ333333");
-    //     } catch (err) {
-    //         console.log("ログ44444" + err);
-    //       }
-      
     }
