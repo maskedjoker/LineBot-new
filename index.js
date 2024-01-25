@@ -119,7 +119,7 @@ const auth = new google.auth.GoogleAuth({
         await drive.permissions.create({
             fileId: folderId,
             requestBody: {
-              role: "owner",
+              role: "writer",
               type: "user",
               emailAddress: 'k.maezmac@gmail.com',
             },
