@@ -136,15 +136,33 @@ const auth = new google.auth.GoogleAuth({
         parents: folderId //アップロードしたいディレクトリID
     };
 
+    var fileId = "";
       try {
-        drive.files.create({
+        const image = await drive.files.create({
             resource: fileMetadata,
             media: media,
             fields: 'id'
           });
-          console.log("ログd");
+          fileId = image.data.id;
+          console.log("ログd" + fileId);
       } catch (err) {
         console.log("ログc" + err);
       }
+
+      
+      try{
+        await drive.permissions.create({
+            fileId: fileId,
+            requestBody: {
+              role: "reader",
+              type: "anyone",
+            },
+            supportsAllDrives: true,
+            supportsTeamDrives: true,
+          });
+          console.log("ログ333333");
+        } catch (err) {
+            console.log("ログ44444" + err);
+          }
       
     }
