@@ -97,7 +97,7 @@ const auth = new google.auth.GoogleAuth({
       };
 
       console.log(folderName);
-      const folderId = "";
+      var folderId = "";
       try {
         const file = await drive.files.create({
             resource: folderMetaData,
