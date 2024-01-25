@@ -110,7 +110,7 @@ const auth = new google.auth.GoogleAuth({
   console.log('ログ5555555', exists);
   var folderId = "";
   if(exists) {
-    folderId = exists.data.id;
+    folderId = exists.id;
   } else {
     
     //フォルダ作成
