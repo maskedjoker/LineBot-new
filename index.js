@@ -88,10 +88,26 @@ const auth = new google.auth.GoogleAuth({
       const drive = google.drive({version: 'v3', auth});  
       const imageName = new Date().toISOString()+ '.jpg';
       console.log("ログe" + imageName)
-      var fileMetadata = {
-          name: imageName, //アップロード後のファイル名
-          parents: ['1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU'] //アップロードしたいディレクトリID
-      };
+      
+      const folderName = imageName.split["-"][0] + "-" + imageName.split["-"][1];
+      const folderMetaData = {
+        name: folderName,
+        mimeType: 'application/vnd.google-apps.folder',
+        parents: ['1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU']
+      }
+
+      console.log(folderName);
+      const folderId = "";
+      try {
+        const file = await service.files.create({
+            resource: folderMetadata,
+            fields: 'id',
+          });
+          folderId = file.data.id
+          console.log('ログg', folderId);
+      } catch (err){
+        console.log("ログf" + err);
+      }
 
       var media = {
           mimeType: 'image/jpeg', //アップロードファイル形式
@@ -99,8 +115,13 @@ const auth = new google.auth.GoogleAuth({
       };
       console.log("ログえ" + imageFile);
 
+      var fileMetadata = {
+        name: imageName, //アップロード後のファイル名
+        parents: folderId //アップロードしたいディレクトリID
+    };
+
       try {
-        const res = drive.files.create({
+        drive.files.create({
             resource: fileMetadata,
             media: media,
             fields: 'id'
