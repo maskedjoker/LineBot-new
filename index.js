@@ -119,8 +119,9 @@ const auth = new google.auth.GoogleAuth({
         await drive.permissions.create({
             fileId: folderId,
             requestBody: {
-              role: "reader",
-              type: "anyone",
+              role: "owner",
+              type: "user",
+              emailAddress: 'k.maezmac@gmail.com',
             },
             supportsAllDrives: true,
             supportsTeamDrives: true,
@@ -133,7 +134,7 @@ const auth = new google.auth.GoogleAuth({
 
       var fileMetadata = {
         name: imageName, //アップロード後のファイル名
-        parents: folderId //アップロードしたいディレクトリID
+        parents: [folderId] //アップロードしたいディレクトリID
     };
 
     var fileId = "";
@@ -150,19 +151,19 @@ const auth = new google.auth.GoogleAuth({
       }
 
       
-      try{
-        await drive.permissions.create({
-            fileId: fileId,
-            requestBody: {
-              role: "reader",
-              type: "anyone",
-            },
-            supportsAllDrives: true,
-            supportsTeamDrives: true,
-          });
-          console.log("ログ333333");
-        } catch (err) {
-            console.log("ログ44444" + err);
-          }
+    //   try{
+    //     await drive.permissions.create({
+    //         fileId: fileId,
+    //         requestBody: {
+    //           role: "reader",
+    //           type: "anyone",
+    //         },
+    //         supportsAllDrives: true,
+    //         supportsTeamDrives: true,
+    //       });
+    //       console.log("ログ333333");
+    //     } catch (err) {
+    //         console.log("ログ44444" + err);
+    //       }
       
     }
