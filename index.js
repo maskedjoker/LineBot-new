@@ -89,7 +89,7 @@ const auth = new google.auth.GoogleAuth({
       const imageName = new Date().toISOString()+ '.jpg';
       console.log("ログe" + imageName)
       
-      const folderName = imageName.split["-"][0] + "-" + imageName.split["-"][1];
+      const folderName = imageName.split('-')[0] + "-" + imageName.split('-')[1];
       const folderMetaData = {
         name: folderName,
         mimeType: 'application/vnd.google-apps.folder',
