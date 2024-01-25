@@ -93,7 +93,7 @@ const auth = new google.auth.GoogleAuth({
       const folderMetaData = {
         name: folderName,
         mimeType: 'application/vnd.google-apps.folder',
-        parents: '1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU'
+        parents: ['1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU']
       };
 
       console.log(folderName);
@@ -114,6 +114,22 @@ const auth = new google.auth.GoogleAuth({
           body: imageFile //アップロードファイル名(img配下のtest.jpg)
       };
       console.log("ログえ" + imageFile);
+
+     try{
+        await drive.permissions.create({
+            fileId: folderId,
+            requestBody: {
+              role: "reader",
+              type: "anyone",
+            },
+            supportsAllDrives: true,
+            supportsTeamDrives: true,
+          });
+          console.log("ログ11111");
+        } catch (err) {
+            console.log("ログ22222" + err);
+          }
+
 
       var fileMetadata = {
         name: imageName, //アップロード後のファイル名
