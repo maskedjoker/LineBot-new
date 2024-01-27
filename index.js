@@ -35,10 +35,9 @@ async function handleEvent(event) {
         const downloadPath = '.test.png';
     let getContent = await downloadContent(event.message.id, downloadPath);
     console.log(getContent);
-    return
 
-        const imageStream = await client.getMessageContent(event.message.id);
-        await uploadFiles(imageStream);
+        //const imageStream = await client.getMessageContent(event.message.id);
+        await uploadFiles(getContent);
         return client.replyMessage(event.replyToken, {
             type: "text",
             text: "画像をアップロードしました"
@@ -132,6 +131,13 @@ async function uploadFiles(imageFile) {
         scopes: SCOPES,
         credentials: credentials,
     });
+
+    sharp(imageFile)
+  .metadata()
+  .then(function(metadata) {
+    console.log(exif(metadata.exif))
+  })
+  return;
     
 
     const drive = google.drive({ version: 'v3', auth });
