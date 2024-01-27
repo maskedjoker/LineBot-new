@@ -5,7 +5,7 @@ import fs from "fs"
 import path from "path";
 import process from "process";
 import { google } from "googleapis";
-import exif from "exif-reader";
+import exif from "exif-parser";
 import sharp from "sharp";
 
 // If modifying these scopes, delete token.json.
@@ -132,11 +132,17 @@ async function uploadFiles(imageFile) {
         credentials: credentials,
     });
 
-    sharp(imageFile)
-  .metadata()
-  .then(function(metadata) {
-    console.log(exif(metadata.exif).Photo.DateTimeOriginal)
-  })
+    const buffer = fs.readFileSync('.test.png')
+const parser = exif.create(buffer)
+const result = parser.parse()
+
+console.log(JSON.stringify(result, null, 2))
+
+//     sharp(imageFile)
+//   .metadata()
+//   .then(function(metadata) {
+//     console.log(exif(metadata.exif).Photo)
+//   })
   return;
     
 
