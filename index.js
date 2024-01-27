@@ -59,9 +59,9 @@ async function existsDirectory(directoryId, directoryName, drive){
     return res.data.files.find(file => file.name === directoryName);
 }
 
-async function createDirectory(rootDirectoryId, directoryName){
+async function createDirectory(rootDirectoryId, directoryName, drive){
     var createdDirectoryId = "";
-    var exists = await existsDirectory(rootDirectoryId, directoryName);
+    var exists = await existsDirectory(rootDirectoryId, directoryName, drive);
     if (exists) {
         return exists.id;
     }
