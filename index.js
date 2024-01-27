@@ -121,7 +121,7 @@ async function uploadFiles(imageFile) {
 
     const rootDirectoryId = '1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU';
     const monthDirectoryName = imageName.split('-')[0] + "-" + imageName.split('-')[1];
-    const dayDirectoryName = imageName.split('-')[2];
+    const dayDirectoryName = imageName.split('-')[2].split('T')[0];
 
     var monthDirectoryId = await createDirectory(rootDirectoryId, monthDirectoryName, drive);
     var dayDirectoryId = await createDirectory(monthDirectoryId, dayDirectoryName, drive);
