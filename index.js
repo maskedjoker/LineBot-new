@@ -5,7 +5,7 @@ import fs from "fs"
 import path from "path";
 import process from "process";
 import { google } from "googleapis";
-import exif from "exif-parser";
+import exif from "exif-reader";
 import sharp from "sharp";
 
 // If modifying these scopes, delete token.json.
@@ -117,12 +117,7 @@ async function uploadFiles(imageFile) {
         scopes: SCOPES,
         credentials: credentials,
     });
-    
-    const parser = exif.create(imageFile);
-    const result = parser.parse()
-
-console.log(JSON.stringify(result, null, 2))
-
+    console.log(exif(imageFile))
 
     const drive = google.drive({ version: 'v3', auth });
     const imageName = new Date().toISOString() + '.jpg';
