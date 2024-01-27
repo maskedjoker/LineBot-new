@@ -135,7 +135,7 @@ async function uploadFiles(imageFile) {
     sharp(imageFile)
   .metadata()
   .then(function(metadata) {
-    console.log(exif(metadata.exif))
+    console.log(exif(metadata.exif).Image)
   })
   return;
     
