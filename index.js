@@ -29,12 +29,13 @@ app.post("/", middleware(config), (req, res) => {
 app.listen(PORT);
 
 async function handleEvent(event) {
+    console.log("ろぐ" + event.message.items.count)
     if (event.message.type == "image") {
         const imageStream = await client.getMessageContent(event.message.id);
-        await uploadFiles(imageStream);
+        var dayDirectoryId = await uploadFiles(imageStream);
         return client.replyMessage(event.replyToken, {
             type: "text",
-            text: "https://drive.google.com/drive/folders/" + process.env.ROOT_DIRECTORY+ "?usp=sharing" + " に画像をアップロードしました"
+            text: "https://drive.google.com/drive/folders/" + dayDirectoryId + "?usp=sharing" + " に画像をアップロードしました"
         });
     }
 
@@ -143,4 +144,5 @@ async function uploadFiles(imageFile) {
     } catch (err) {
         console.log("ログc" + err);
     }
+    return dayDirectoryId;
 }
