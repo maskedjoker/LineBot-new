@@ -31,10 +31,10 @@ app.listen(PORT);
 async function handleEvent(event) {
     if (event.message.type == "image") {
         const imageStream = await client.getMessageContent(event.message.id);
-        await uploadFiles(getContent);
+        await uploadFiles(imageStream);
         return client.replyMessage(event.replyToken, {
             type: "text",
-            text: "画像をアップロードしました"
+            text: "https://drive.google.com/drive/folders/" + process.env.ROOT_DIRECTORY+ "?usp=sharing" + " に画像をアップロードしました"
         });
     }
 
@@ -86,7 +86,7 @@ async function createDirectory(rootDirectoryId, directoryName, drive){
             requestBody: {
                 role: "writer",
                 type: "user",
-                emailAddress: 'k.maezmac@gmail.com',
+                emailAddress: process.env.PREMITTED_EMAIL
             },
             supportsAllDrives: true,
             supportsTeamDrives: true,
@@ -119,7 +119,7 @@ async function uploadFiles(imageFile) {
     const drive = google.drive({ version: 'v3', auth });
     const imageName = new Date().toISOString() + '.jpg';
 
-    const rootDirectoryId = '1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU';
+    const rootDirectoryId = process.env.ROOT_DIRECTORY;
     const monthDirectoryName = imageName.split('-')[0] + "-" + imageName.split('-')[1];
     const dayDirectoryName = imageName.split('-')[2].split('T')[0];
 
@@ -139,7 +139,7 @@ async function uploadFiles(imageFile) {
             },
             fields: 'id'
         });
-        fileId = image.data.id;
+        fileId = image.data.id
     } catch (err) {
         console.log("ログc" + err);
     }
