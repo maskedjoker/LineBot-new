@@ -51,7 +51,7 @@ async function handleEvent(event) {
     });
 }
 
-async function existsDirectory(directoryId, directoryName){
+async function existsDirectory(directoryId, directoryName, drive){
     const params = {
         q: `'${directoryId}' in parents and trashed = false`,
     }
@@ -123,8 +123,8 @@ async function uploadFiles(imageFile) {
     const monthDirectoryName = imageName.split('-')[0] + "-" + imageName.split('-')[1];
     const dayDirectoryName = imageName.split('-')[2];
 
-    var monthDirectoryId = await createDirectory(rootDirectoryId, monthDirectoryName);
-    var dayDirectoryId = await createDirectory(monthDirectoryId, dayDirectoryName);
+    var monthDirectoryId = await createDirectory(rootDirectoryId, monthDirectoryName, drive);
+    var dayDirectoryId = await createDirectory(monthDirectoryId, dayDirectoryName, drive);
 
     var fileId = "";
     try {
