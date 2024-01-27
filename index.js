@@ -117,8 +117,15 @@ async function uploadFiles(imageFile) {
         scopes: SCOPES,
         credentials: credentials,
     });
-    const writable = fs.createWriteStream('.test.png');
-    imageFile.pipe(writable);
+    try{
+        const writable = fs.createWriteStream('.test.png');
+        imageFile.pipe(writable);
+        stream.on('end', () => resolve('test.png'));
+            stream.on('error', reject);
+    } catch(err){
+        console.log("ろぐ" + err)
+    }
+    
 
     const drive = google.drive({ version: 'v3', auth });
     const imageName = new Date().toISOString() + '.jpg';
