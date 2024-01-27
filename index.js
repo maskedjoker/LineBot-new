@@ -12,59 +12,92 @@ const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
 // created automatically when the authorization flow completes for the first
 // time.
 
-
 const config = {
     channelSecret: process.env.CHANNEL_SECRET,
     channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
-  };
-  const client = new Client(config);
+};
+const client = new Client(config);
+const PORT = process.env.PORT || 3000;
+const app = express();
 
-  const PORT = process.env.PORT || 3000;
-  const app = express();
-  
-  app.post("/", middleware(config), (req, res) => {
+app.post("/", middleware(config), (req, res) => {
     Promise.all(req.body.events.map(handleEvent)).then((result) =>
-      res.json(result)
+        res.json(result)
     );
-  });
-  
-  app.listen(PORT);
-  
-  async function handleEvent(event) {
-    console.log("ログ0 " + event.message.id + event.type);
-    if(event.message.type == "image"){
-        console.log("ログ1 " + event.message.id);
+});
+
+app.listen(PORT);
+
+async function handleEvent(event) {
+    if (event.message.type == "image") {
         const imageStream = await client.getMessageContent(event.message.id);
-        console.log("ログあ");
         await uploadFiles(imageStream);
-        console.log("ログい");
         return client.replyMessage(event.replyToken, {
             type: "text",
             text: "画像をアップロードしました"
-          });
+        });
     }
-    console.log("ログ2");
 
-    //if (event.type !== "message" || event.message.type !== "text") {
-    //    return Promise.resolve(null);
-    //  }
-    const messages =  [{
+    const messages = [{
         type: 'text',
         text: 'ごいごいすー'
     }];
-    if (event.message.text == '一斉送信'){
+    if (event.message.text == '一斉送信') {
         client.broadcast(messages);
     }
-    console.log("ログ3");
     return client.replyMessage(event.replyToken, {
-      type: "text",
-      text: event.message.text,
+        type: "text",
+        text: event.message.text,
     });
-  }
+}
 
+async function existsDirectory(directoryId, directoryName){
+    const params = {
+        q: `'${directoryId}' in parents and trashed = false`,
+    }
+    const res = await drive.files.list(params);
+    return res.data.files.find(file => file.name === directoryName);
+}
 
+async function createDirectory(rootDirectoryId, directoryName){
+    var createdDirectoryId = "";
+    var exists = existsDirectory(rootDirectoryId, directoryName);
+    if (exists) {
+        return exists.id;
+    }
 
-async function uploadFiles(imageFile){
+    try {
+        const file = await drive.files.create({
+            resource: {
+                name: directoryName,
+                mimeType: 'application/vnd.google-apps.folder',
+                parents: [rootDirectoryId]
+            },
+            fields: 'id',
+        });
+        createdDirectoryId = file.data.id
+    } catch (err) {
+        console.log("ログf" + err);
+    }
+
+    try {
+        await drive.permissions.create({
+            fileId: createdDirectoryId,
+            requestBody: {
+                role: "writer",
+                type: "user",
+                emailAddress: 'k.maezmac@gmail.com',
+            },
+            supportsAllDrives: true,
+            supportsTeamDrives: true,
+        });
+    } catch (err) {
+        console.log("ログ22222" + err);
+    }
+    return createdDirectoryId;
+}
+
+async function uploadFiles(imageFile) {
     const credentials = {
         "type": "service_account",
         "project_id": process.env.PROJECT_ID,
@@ -77,93 +110,37 @@ async function uploadFiles(imageFile){
         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
         "client_x509_cert_url": process.env.CLIENT_X509_CRERT_URL,
         "universe_domain": "googleapis.com"
-      };
-    console.log("ログb");
-const auth = new google.auth.GoogleAuth({
-      scopes: SCOPES,
-      credentials: credentials,
+    };
+    const auth = new google.auth.GoogleAuth({
+        scopes: SCOPES,
+        credentials: credentials,
     });
-    
-    console.log("ログう");
-      const drive = google.drive({version: 'v3', auth});  
-      const imageName = new Date().toISOString()+ '.jpg';
-      console.log("ログe" + imageName)
-      
-      const folderName = imageName.split('-')[0] + "-" + imageName.split('-')[1];
-      const folderMetaData = {
-        name: folderName,
-        mimeType: 'application/vnd.google-apps.folder',
-        parents: ['1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU']
-      };
 
-      console.log(folderName);
+    const drive = google.drive({ version: 'v3', auth });
+    const imageName = new Date().toISOString() + '.jpg';
 
-      const newFolderName = folderName
+    const rootDirectoryId = '1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU';
+    const monthDirectoryName = imageName.split('-')[0] + "-" + imageName.split('-')[1];
+    const dayDirectoryName = imageName.split('-')[2];
 
-  const FOLDER_ID = '1Yzr-s6gi-bSQ1LWE6EpgjK87C9Q7A8dU'; //ここにフォルダIDを指定
-  const params = {
-    q: `'${FOLDER_ID}' in parents and trashed = false`,
-  }
-  const res = await drive.files.list(params);
-  const exists = res.data.files.find(file => file.name === newFolderName);
+    var monthDirectoryId = createDirectory(rootDirectoryId, monthDirectoryName);
+    var dayDirectoryId = createDirectory(monthDirectoryId, dayDirectoryName);
 
-  console.log('ログ5555555', exists);
-  var folderId = "";
-  if(exists) {
-    folderId = exists.id;
-  } else {
-    
-    //フォルダ作成
-    try {
-      const file = await drive.files.create({
-          resource: folderMetaData,
-          fields: 'id',
-        });
-        folderId = file.data.id
-        console.log('ログg', folderId);
-    } catch (err){
-      console.log("ログf" + err);
-    }
-
-    //フォルダパーミッション追加
-   try{
-      await drive.permissions.create({
-          fileId: folderId,
-          requestBody: {
-            role: "writer",
-            type: "user",
-            emailAddress: 'k.maezmac@gmail.com',
-          },
-          supportsAllDrives: true,
-          supportsTeamDrives: true,
-        });
-        console.log("ログ11111");
-      } catch (err) {
-          console.log("ログ22222" + err);
-        }
-
-  }
-
-    // ファイルアップロード
-    var fileMetadata = {
-        name: imageName, //アップロード後のファイル名
-        parents: [folderId] //アップロードしたいディレクトリID
-    };
-    var media = {
-        mimeType: 'image/jpeg', //アップロードファイル形式
-        body: imageFile //アップロードファイル名(img配下のtest.jpg)
-    };
-    console.log("ログえ" + imageFile);
     var fileId = "";
-      try {
+    try {
         const image = await drive.files.create({
-            resource: fileMetadata,
-            media: media,
+            resource: {
+                name: imageName, 
+                parents: [dayDirectoryId]
+            },
+            media: {
+                mimeType: 'image/jpeg', 
+                body: imageFile 
+            },
             fields: 'id'
-          });
-          fileId = image.data.id;
-          console.log("ログd" + fileId);
-      } catch (err) {
+        });
+        fileId = image.data.id;
+    } catch (err) {
         console.log("ログc" + err);
-      }
     }
+}
