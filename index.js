@@ -5,8 +5,6 @@ import fs from "fs"
 import path from "path";
 import process from "process";
 import { google } from "googleapis";
-import exif from "exif-parser";
-import sharp from "sharp";
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
@@ -32,11 +30,7 @@ app.listen(PORT);
 
 async function handleEvent(event) {
     if (event.message.type == "image") {
-        const downloadPath = '.test.png';
-    let getContent = await downloadContent(event.message.id, downloadPath);
-    console.log(getContent);
-
-        //const imageStream = await client.getMessageContent(event.message.id);
+        const imageStream = await client.getMessageContent(event.message.id);
         await uploadFiles(getContent);
         return client.replyMessage(event.replyToken, {
             type: "text",
@@ -103,16 +97,6 @@ async function createDirectory(rootDirectoryId, directoryName, drive){
     return createdDirectoryId;
 }
 
-function downloadContent(messageId, downloadPath) {
-    return client.getMessageContent(messageId)
-      .then((stream) => new Promise((resolve, reject) => {
-        const writable = fs.createWriteStream(downloadPath);
-        stream.pipe(writable);
-        stream.on('end', () => resolve(downloadPath));
-        stream.on('error', reject);
-    }));
-}
-
 async function uploadFiles(imageFile) {
     const credentials = {
         "type": "service_account",
@@ -131,20 +115,6 @@ async function uploadFiles(imageFile) {
         scopes: SCOPES,
         credentials: credentials,
     });
-
-    const buffer = fs.readFileSync('.test.png')
-const parser = exif.create(buffer)
-const result = parser.parse()
-
-console.log(JSON.stringify(result, null, 2))
-
-//     sharp(imageFile)
-//   .metadata()
-//   .then(function(metadata) {
-//     console.log(exif(metadata.exif).Photo)
-//   })
-  return;
-    
 
     const drive = google.drive({ version: 'v3', auth });
     const imageName = new Date().toISOString() + '.jpg';
