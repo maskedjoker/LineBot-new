@@ -61,7 +61,7 @@ async function existsDirectory(directoryId, directoryName){
 
 async function createDirectory(rootDirectoryId, directoryName){
     var createdDirectoryId = "";
-    var exists = existsDirectory(rootDirectoryId, directoryName);
+    var exists = await existsDirectory(rootDirectoryId, directoryName);
     if (exists) {
         return exists.id;
     }
@@ -123,8 +123,8 @@ async function uploadFiles(imageFile) {
     const monthDirectoryName = imageName.split('-')[0] + "-" + imageName.split('-')[1];
     const dayDirectoryName = imageName.split('-')[2];
 
-    var monthDirectoryId = createDirectory(rootDirectoryId, monthDirectoryName);
-    var dayDirectoryId = createDirectory(monthDirectoryId, dayDirectoryName);
+    var monthDirectoryId = await createDirectory(rootDirectoryId, monthDirectoryName);
+    var dayDirectoryId = await createDirectory(monthDirectoryId, dayDirectoryName);
 
     var fileId = "";
     try {
