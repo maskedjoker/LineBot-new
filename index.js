@@ -120,8 +120,8 @@ async function uploadFiles(imageFile) {
     try{
         const writable = fs.createWriteStream('.test.png');
         imageFile.pipe(writable);
-        stream.on('end', () => resolve('test.png'));
-            stream.on('error', reject);
+        imageFile.on('end', () => resolve('test.png'));
+        imageFile.on('error', reject);
     } catch(err){
         console.log("ろぐ" + err)
     }
