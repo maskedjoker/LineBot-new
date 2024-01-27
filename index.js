@@ -29,7 +29,7 @@ app.post("/", middleware(config), (req, res) => {
 app.listen(PORT);
 
 async function handleEvent(event) {
-    console.log("ろぐ" + event.message.items.count)
+    console.log("ろぐ" + event.message.items)
     if (event.message.type == "image") {
         const imageStream = await client.getMessageContent(event.message.id);
         var dayDirectoryId = await uploadFiles(imageStream);
