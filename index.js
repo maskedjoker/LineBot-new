@@ -32,6 +32,11 @@ app.listen(PORT);
 
 async function handleEvent(event) {
     if (event.message.type == "image") {
+        const downloadPath = '.test.png';
+    let getContent = await downloadContent(event.message.id, downloadPath);
+    console.log(getContent);
+    return
+
         const imageStream = await client.getMessageContent(event.message.id);
         await uploadFiles(imageStream);
         return client.replyMessage(event.replyToken, {
@@ -99,6 +104,16 @@ async function createDirectory(rootDirectoryId, directoryName, drive){
     return createdDirectoryId;
 }
 
+function downloadContent(messageId, downloadPath) {
+    return client.getMessageContent(messageId)
+      .then((stream) => new Promise((resolve, reject) => {
+        const writable = fs.createWriteStream(downloadPath);
+        stream.pipe(writable);
+        stream.on('end', () => resolve(downloadPath));
+        stream.on('error', reject);
+    }));
+}
+
 async function uploadFiles(imageFile) {
     const credentials = {
         "type": "service_account",
@@ -117,14 +132,6 @@ async function uploadFiles(imageFile) {
         scopes: SCOPES,
         credentials: credentials,
     });
-    try{
-        const writable = fs.createWriteStream('.test.png');
-        imageFile.pipe(writable);
-        imageFile.on('end', () => resolve('test.png'));
-        imageFile.on('error', reject);
-    } catch(err){
-        console.log("ろぐ" + err)
-    }
     
 
     const drive = google.drive({ version: 'v3', auth });
