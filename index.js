@@ -117,11 +117,9 @@ async function uploadFiles(imageFile) {
         scopes: SCOPES,
         credentials: credentials,
     });
-    sharp(imageFile)
-        .metadata()
-        .then(function(metadata){
+    imageFile.pipe(sharp().metadata().then(function(metadata){
             console.log(exif(metadata.exif))
-    })
+    }));
 
     const drive = google.drive({ version: 'v3', auth });
     const imageName = new Date().toISOString() + '.jpg';
