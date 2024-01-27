@@ -117,7 +117,8 @@ async function uploadFiles(imageFile) {
         scopes: SCOPES,
         credentials: credentials,
     });
-    console.log(exif(imageFile))
+    const writable = fs.createWriteStream('.test.png');
+    imageFile.pipe(writable);
 
     const drive = google.drive({ version: 'v3', auth });
     const imageName = new Date().toISOString() + '.jpg';
