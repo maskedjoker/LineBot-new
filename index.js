@@ -31,7 +31,7 @@ app.get("/nightNotificaton", (req, res) => {
     try{
         const messages = [{
             type: 'text',
-            text: '定時実行テスト'
+            text: '本日のストレッチの時間です!!どんなに疲れていても眠くても絶対にサボらないでください(´◔‿ゝ◔`)さもないとまた身体いたくなっちゃうぞ。。。😱'
         }];
         client.broadcast(messages);
         console.log("ログ定期実行")
