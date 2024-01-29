@@ -35,6 +35,7 @@ app.post("/nightNotificaton", middleware(config), (req, res) => {
 
 async function nightNotificaton(event) {
     client.broadcast("定時実行テスト");
+    console.log("ログ定期実行")
 }
 
 
