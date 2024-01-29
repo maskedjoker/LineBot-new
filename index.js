@@ -5,7 +5,6 @@ import fs from "fs"
 import path from "path";
 import process from "process";
 import { google } from "googleapis";
-import cron from "node-cron";
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
@@ -21,15 +20,23 @@ const client = new Client(config);
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-cron.schedule('0 0,5,10,15,20,25,30,35,40,45,50,55 * * * *', () =>{
-    client.broadcast("定時実行テスト");
-})
 
 app.post("/", middleware(config), (req, res) => {
     Promise.all(req.body.events.map(handleEvent)).then((result) =>
         res.json(result)
     );
 });
+
+app.post("/nightNotificaton", middleware(config), (req, res) => {
+    Promise.all(req.body.events.map(nightNotificaton)).then((result) =>
+        res.json(result)
+    );
+});
+
+async function nightNotificaton(event) {
+    client.broadcast("定時実行テスト");
+}
+
 
 app.listen(PORT);
 
