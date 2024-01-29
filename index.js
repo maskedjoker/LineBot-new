@@ -27,20 +27,19 @@ app.post("/", middleware(config), (req, res) => {
     );
 });
 
-app.get("/nightNotificaton", middleware(config), (req, res) => {
+app.get("/nightNotificaton", (req, res) => {
     try{
-        Promise.all(nightNotificaton).then((result) =>
-        res.json(result)
-    );
+        const messages = [{
+            type: 'text',
+            text: '定時実行テスト'
+        }];
+        client.broadcast(messages);
+        console.log("ログ定期実行")
     } catch(err){
         console.log(err);
     }
+    res.send('night');
 });
-
-async function nightNotificaton() {
-    client.broadcast("定時実行テスト");
-    console.log("ログ定期実行")
-}
 
 
 app.listen(PORT);
