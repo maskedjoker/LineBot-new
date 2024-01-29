@@ -27,10 +27,14 @@ app.post("/", middleware(config), (req, res) => {
     );
 });
 
-app.post("/nightNotificaton", middleware(config), (req, res) => {
-    Promise.all(nightNotificaton).then((result) =>
+app.get("/nightNotificaton", middleware(config), (req, res) => {
+    try{
+        Promise.all(nightNotificaton).then((result) =>
         res.json(result)
     );
+    } catch(err){
+        console.log(err);
+    }
 });
 
 async function nightNotificaton() {
