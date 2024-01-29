@@ -28,12 +28,12 @@ app.post("/", middleware(config), (req, res) => {
 });
 
 app.post("/nightNotificaton", middleware(config), (req, res) => {
-    Promise.all(req.body.events.map(nightNotificaton)).then((result) =>
+    Promise.all(nightNotificaton).then((result) =>
         res.json(result)
     );
 });
 
-async function nightNotificaton(event) {
+async function nightNotificaton() {
     client.broadcast("定時実行テスト");
     console.log("ログ定期実行")
 }
