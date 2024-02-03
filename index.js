@@ -77,11 +77,11 @@ async function handleEvent(event) {
         const monthDirectoryName = imageName.split('-')[0] + "-" + imageName.split('-')[1];
         const dayDirectoryName = imageName.split('-')[2].split('T')[0];
     
-        var monthDirectoryId = await createDirectory(rootDirectoryId, monthDirectoryName, drive, index);
-        var dayDirectoryId = await createDirectory(monthDirectoryId, dayDirectoryName, drive, index);
+        var monthDirectoryId = await createDirectory(rootDirectoryId, monthDirectoryName, drive);
+        var dayDirectoryId = await createDirectory(monthDirectoryId, dayDirectoryName, drive);
 
         const imageStream = await client.getMessageContent(event.message.id);
-        var dayDirectoryId = await uploadFiles(imageStream, drive, dayDirectoryId);
+        var dayDirectoryId = await uploadFiles(imageStream, drive, dayDirectoryId, imageName);
 
         if(index != target){
             return;
@@ -113,7 +113,7 @@ async function existsDirectory(directoryId, directoryName, drive){
     return res.data.files.find(file => file.name === directoryName);
 }
 
-async function createDirectory(rootDirectoryId, directoryName, drive, index){
+async function createDirectory(rootDirectoryId, directoryName, drive){
     var createdDirectoryId = "";
     var exists = await existsDirectory(rootDirectoryId, directoryName, drive);
     if (exists) {
@@ -151,7 +151,7 @@ async function createDirectory(rootDirectoryId, directoryName, drive, index){
     return createdDirectoryId;
 }
 
-async function uploadFiles(imageFile, drive, dayDirectoryId) {
+async function uploadFiles(imageFile, drive, dayDirectoryId, imageName) {
 
     var fileId = "";
     try {
