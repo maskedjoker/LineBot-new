@@ -49,9 +49,15 @@ async function handleEvent(event) {
     console.log("ろぐa")
     console.log(event.message)
     console.log("ろぐb")
+    var index = event.message.index;
+    var target = event.message.target;
     if (event.message.type == "image") {
         const imageStream = await client.getMessageContent(event.message.id);
-        var dayDirectoryId = await uploadFiles(imageStream);
+        var dayDirectoryId = await uploadFiles(imageStream, index);
+
+        if(index != target){
+            return;
+        }
         return client.replyMessage(event.replyToken, {
             type: "text",
             text: "https://drive.google.com/drive/folders/" + dayDirectoryId + "?usp=sharing" + " に画像をアップロードしました"
@@ -79,11 +85,14 @@ async function existsDirectory(directoryId, directoryName, drive){
     return res.data.files.find(file => file.name === directoryName);
 }
 
-async function createDirectory(rootDirectoryId, directoryName, drive){
+async function createDirectory(rootDirectoryId, directoryName, drive, index){
     var createdDirectoryId = "";
     var exists = await existsDirectory(rootDirectoryId, directoryName, drive);
     if (exists) {
         return exists.id;
+    }
+    if(index != 1){
+        return;
     }
 
     try {
@@ -117,7 +126,7 @@ async function createDirectory(rootDirectoryId, directoryName, drive){
     return createdDirectoryId;
 }
 
-async function uploadFiles(imageFile) {
+async function uploadFiles(imageFile, index) {
     const credentials = {
         "type": "service_account",
         "project_id": process.env.PROJECT_ID,
@@ -143,8 +152,8 @@ async function uploadFiles(imageFile) {
     const monthDirectoryName = imageName.split('-')[0] + "-" + imageName.split('-')[1];
     const dayDirectoryName = imageName.split('-')[2].split('T')[0];
 
-    var monthDirectoryId = await createDirectory(rootDirectoryId, monthDirectoryName, drive);
-    var dayDirectoryId = await createDirectory(monthDirectoryId, dayDirectoryName, drive);
+    var monthDirectoryId = await createDirectory(rootDirectoryId, monthDirectoryName, drive, index);
+    var dayDirectoryId = await createDirectory(monthDirectoryId, dayDirectoryName, drive, index);
 
     var fileId = "";
     try {
