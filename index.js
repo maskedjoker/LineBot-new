@@ -5,6 +5,7 @@ import fs from "fs"
 import path from "path";
 import process from "process";
 import { google } from "googleapis";
+import { setTimeout } from('timers/promises');
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
@@ -115,6 +116,7 @@ async function existsDirectory(directoryId, directoryName, drive){
 
 async function createDirectory(rootDirectoryId, directoryName, drive){
     var createdDirectoryId = "";
+    await setTimeout(2000);
     var exists = await existsDirectory(rootDirectoryId, directoryName, drive);
     if (exists) {
         console.log("ろぐ" + exists.id)
