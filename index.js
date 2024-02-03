@@ -5,7 +5,7 @@ import fs from "fs"
 import path from "path";
 import process from "process";
 import { google } from "googleapis";
-import { setTimeout } from('timers/promises');
+import { setTimeout } from 'timers/promises';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
