@@ -53,8 +53,22 @@ async function handleEvent(event) {
     var index = event.message.imageSet.index;
     var target = event.message.imageSet.total;
     if (event.message.type == "image") {
+        const auth = new google.auth.GoogleAuth({
+            scopes: SCOPES,
+            credentials: credentials,
+        });
+        const drive = google.drive({ version: 'v3', auth });
+        const imageName = new Date().toISOString() + '.jpg';
+    
+        const rootDirectoryId = process.env.ROOT_DIRECTORY;
+        const monthDirectoryName = imageName.split('-')[0] + "-" + imageName.split('-')[1];
+        const dayDirectoryName = imageName.split('-')[2].split('T')[0];
+    
+        var monthDirectoryId = await createDirectory(rootDirectoryId, monthDirectoryName, drive, index);
+        var dayDirectoryId = await createDirectory(monthDirectoryId, dayDirectoryName, drive, index);
+
         const imageStream = await client.getMessageContent(event.message.id);
-        var dayDirectoryId = await uploadFiles(imageStream, index);
+        var dayDirectoryId = await uploadFiles(imageStream, drive, dayDirectoryId);
 
         if(index != target){
             return;
@@ -92,9 +106,6 @@ async function createDirectory(rootDirectoryId, directoryName, drive, index){
     if (exists) {
         return exists.id;
     }
-    if(index != 1){
-        return;
-    }
 
     try {
         const file = await drive.files.create({
@@ -127,7 +138,7 @@ async function createDirectory(rootDirectoryId, directoryName, drive, index){
     return createdDirectoryId;
 }
 
-async function uploadFiles(imageFile, index) {
+async function uploadFiles(imageFile, drive, dayDirectoryId) {
     const credentials = {
         "type": "service_account",
         "project_id": process.env.PROJECT_ID,
@@ -141,20 +152,6 @@ async function uploadFiles(imageFile, index) {
         "client_x509_cert_url": process.env.CLIENT_X509_CRERT_URL,
         "universe_domain": "googleapis.com"
     };
-    const auth = new google.auth.GoogleAuth({
-        scopes: SCOPES,
-        credentials: credentials,
-    });
-
-    const drive = google.drive({ version: 'v3', auth });
-    const imageName = new Date().toISOString() + '.jpg';
-
-    const rootDirectoryId = process.env.ROOT_DIRECTORY;
-    const monthDirectoryName = imageName.split('-')[0] + "-" + imageName.split('-')[1];
-    const dayDirectoryName = imageName.split('-')[2].split('T')[0];
-
-    var monthDirectoryId = await createDirectory(rootDirectoryId, monthDirectoryName, drive, index);
-    var dayDirectoryId = await createDirectory(monthDirectoryId, dayDirectoryName, drive, index);
 
     var fileId = "";
     try {
