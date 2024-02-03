@@ -48,10 +48,10 @@ app.listen(PORT);
 async function handleEvent(event) {
     console.log("ろぐa")
     console.log(event.message.imageSet.index)
-    console.log(event.message.imageSet.target)
+    console.log(event.message.imageSet.total)
     console.log("ろぐb")
     var index = event.message.imageSet.index;
-    var target = event.message.imageSet.target;
+    var target = event.message.imageSet.total;
     if (event.message.type == "image") {
         const imageStream = await client.getMessageContent(event.message.id);
         var dayDirectoryId = await uploadFiles(imageStream, index);
