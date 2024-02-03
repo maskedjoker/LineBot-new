@@ -117,6 +117,7 @@ async function createDirectory(rootDirectoryId, directoryName, drive){
     var createdDirectoryId = "";
     var exists = await existsDirectory(rootDirectoryId, directoryName, drive);
     if (exists) {
+        console.log("ろぐ" + exists.id)
         return exists.id;
     }
 
