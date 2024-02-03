@@ -22,6 +22,7 @@ const app = express();
 
 
 app.post("/", middleware(config), (req, res) => {
+    console.log(req)
     Promise.all(req.body.events.map(handleEvent)).then((result) =>
         res.json(result)
     );
