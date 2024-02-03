@@ -22,7 +22,7 @@ const app = express();
 
 
 app.post("/", middleware(config), (req, res) => {
-    console.log(req)
+
     Promise.all(req.body.events.map(handleEvent)).then((result) =>
         res.json(result)
     );
@@ -46,6 +46,9 @@ app.get("/nightNotificaton", (req, res) => {
 app.listen(PORT);
 
 async function handleEvent(event) {
+    console.log("ろぐa")
+    console.log(event.message)
+    console.log("ろぐb")
     if (event.message.type == "image") {
         const imageStream = await client.getMessageContent(event.message.id);
         var dayDirectoryId = await uploadFiles(imageStream);
