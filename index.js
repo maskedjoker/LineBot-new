@@ -47,13 +47,14 @@ app.get("/nightNotificaton", (req, res) => {
 app.listen(PORT);
 
 async function handleEvent(event) {
-    console.log("ろぐa")
-    console.log(event.message.imageSet.index)
-    console.log(event.message.imageSet.total)
-    console.log("ろぐb")
-    var index = event.message.imageSet.index;
-    var target = event.message.imageSet.total;
+
     if (event.message.type == "image") {
+        console.log("ろぐa")
+        console.log(event.message.imageSet.index)
+        console.log(event.message.imageSet.total)
+        console.log("ろぐb")
+        var index = event.message.imageSet.index;
+        var target = event.message.imageSet.total;
         const credentials = {
             "type": "service_account",
             "project_id": process.env.PROJECT_ID,
