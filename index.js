@@ -109,7 +109,7 @@ async function handleEvent(event) {
 //     console.log(exif(metadata.exif))
 //   })
   //console.log(exif(imageBuffer))
-        console.log(tags['exif'])
+        console.log(tags)
         var dayDirectoryId = await uploadFiles(imageBuffer, drive, dayDirectoryId, imageName);
 
         if(index != total){
