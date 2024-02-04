@@ -7,6 +7,7 @@ import process from "process";
 import { google } from "googleapis";
 import { setTimeout } from 'timers/promises';
 import ExifReader from 'exifreader';
+import sharp from 'sharp';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
@@ -100,8 +101,13 @@ async function handleEvent(event) {
           });
         });
       }))();
-        const tags = await ExifReader.load(imageBuffer, {async: true}, {expanded: true});
-        console.log(tags)
+        // const tags = await ExifReader.load(imageBuffer, {async: true}, {expanded: true});
+        sharp(imageBuffer)
+  .metadata()
+  .then(function(metadata) {
+    console.log(exif(metadata.exif))
+  })
+        //console.log(tags)
         var dayDirectoryId = await uploadFiles(imageBuffer, drive, dayDirectoryId, imageName);
 
         if(index != total){

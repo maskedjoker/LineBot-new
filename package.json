@@ -24,8 +24,8 @@
   "type": "module",
   "exifreader": {
     "include": {
-        "jpeg": true,
-        "exif": true
+      "jpeg": true,
+      "exif": true
     }
-}
+  }
 }
