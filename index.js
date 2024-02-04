@@ -102,14 +102,14 @@ async function handleEvent(event) {
           });
         });
       }))();
-        // const tags = await ExifReader.load(imageBuffer, {async: true}, {expanded: true});
+        const tags = await ExifReader.load(imageBuffer, {async: true}, {expanded: true});
 //         sharp(imageBuffer)
 //   .metadata()
 //   .then(function(metadata) {
 //     console.log(exif(metadata.exif))
 //   })
-  console.log(exif(imageBuffer))
-        //console.log(tags)
+  //console.log(exif(imageBuffer))
+        console.log(tags['exif'])
         var dayDirectoryId = await uploadFiles(imageBuffer, drive, dayDirectoryId, imageName);
 
         if(index != total){
