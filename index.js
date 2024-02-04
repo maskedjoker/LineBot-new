@@ -84,7 +84,7 @@ async function handleEvent(event) {
         var monthDirectoryId = await createDirectory(rootDirectoryId, monthDirectoryName, drive);
         var dayDirectoryId = await createDirectory(monthDirectoryId, dayDirectoryName, drive);
 
-        //const imageStream = await client.getMessageContent(event.message.id);
+        const imageStream = await client.getMessageContent(event.message.id);
         const imageBuffer = await (() =>
       new Promise((resolve) => {
         client.getMessageContent(event.message.id).then((stream) => {
@@ -100,9 +100,8 @@ async function handleEvent(event) {
           });
         });
       }))();
-        const tags = await ExifReader.load(imageBuffer);
-        const imageDate = tags['exif'];
-        console.log(imageDate)
+        const tags = await ExifReader.load(imageBuffer, {async: true});
+        console.log(tags)
         var dayDirectoryId = await uploadFiles(imageBuffer, drive, dayDirectoryId, imageName);
 
         if(index != total){
