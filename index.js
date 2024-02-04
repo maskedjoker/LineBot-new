@@ -6,6 +6,7 @@ import path from "path";
 import process from "process";
 import { google } from "googleapis";
 import { setTimeout } from 'timers/promises';
+import ExifReader from 'exifreader';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
@@ -50,7 +51,7 @@ async function handleEvent(event) {
 
     if (event.message.type == "image") {
         var index = 100;
-        var total = 101;
+        var total = 100;
         if(event.message.imageSet){
             index = event.message.imageSet.index
             total = event.message.imageSet.total
@@ -83,6 +84,8 @@ async function handleEvent(event) {
         var dayDirectoryId = await createDirectory(monthDirectoryId, dayDirectoryName, drive);
 
         const imageStream = await client.getMessageContent(event.message.id);
+        const tags = await ExifReader.load(imageStream);
+        console.log(tags)
         var dayDirectoryId = await uploadFiles(imageStream, drive, dayDirectoryId, imageName);
 
         if(index != total){
