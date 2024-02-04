@@ -49,12 +49,12 @@ app.listen(PORT);
 async function handleEvent(event) {
 
     if (event.message.type == "image") {
-        console.log("ろぐa")
-        console.log(event.message.imageSet.index)
-        console.log(event.message.imageSet.total)
-        console.log("ろぐb")
-        var index = event.message.imageSet.index;
-        var target = event.message.imageSet.total;
+        var index = 100;
+        var total = 101;
+        if(event.message.imageSet){
+            index = event.message.imageSet.index
+            total = event.message.imageSet.total
+        }
         const credentials = {
             "type": "service_account",
             "project_id": process.env.PROJECT_ID,
@@ -85,7 +85,7 @@ async function handleEvent(event) {
         const imageStream = await client.getMessageContent(event.message.id);
         var dayDirectoryId = await uploadFiles(imageStream, drive, dayDirectoryId, imageName);
 
-        if(index != target){
+        if(index != total){
             return;
         }
         return client.replyMessage(event.replyToken, {
