@@ -101,7 +101,7 @@ async function handleEvent(event) {
         });
       }))();
         const tags = await ExifReader.load(imageBuffer);
-        const imageDate = tags['DateTimeOriginal'].description;
+        const imageDate = tags['exif'];
         console.log(imageDate)
         var dayDirectoryId = await uploadFiles(imageBuffer, drive, dayDirectoryId, imageName);
 
