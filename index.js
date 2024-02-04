@@ -100,7 +100,7 @@ async function handleEvent(event) {
           });
         });
       }))();
-        const tags = await ExifReader.load(imageBuffer, {async: true});
+        const tags = await ExifReader.load(imageBuffer, {async: true}, {expanded: true});
         console.log(tags)
         var dayDirectoryId = await uploadFiles(imageBuffer, drive, dayDirectoryId, imageName);
 
