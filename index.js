@@ -102,7 +102,7 @@ async function handleEvent(event) {
           });
         });
       }))();
-        const tags = await ExifReader.load(imageBuffer, {async: true}, {expanded: true});
+        const tags = await ExifReader.load(imageBuffer, {async: true}, {expanded: true}, {includeUnknown: true});
 //         sharp(imageBuffer)
 //   .metadata()
 //   .then(function(metadata) {
@@ -110,7 +110,7 @@ async function handleEvent(event) {
 //   })
   //console.log(exif(imageBuffer))
         console.log(tags)
-        var dayDirectoryId = await uploadFiles(imageBuffer, drive, dayDirectoryId, imageName);
+        var dayDirectoryId = await uploadFiles(imageStream, drive, dayDirectoryId, imageName);
 
         if(index != total){
             return;
