@@ -47,6 +47,7 @@ app.get("/nightNotificaton", (req, res) => {
 
 app.listen(PORT);
 
+
 async function handleEvent(event) {
 
     if (event.message.type == "image") {
@@ -83,10 +84,25 @@ async function handleEvent(event) {
         var monthDirectoryId = await createDirectory(rootDirectoryId, monthDirectoryName, drive);
         var dayDirectoryId = await createDirectory(monthDirectoryId, dayDirectoryName, drive);
 
-        const imageStream = await client.getMessageContent(event.message.id);
-        const tags = await ExifReader.load(imageStream);
+        //const imageStream = await client.getMessageContent(event.message.id);
+        const imageBuffer = await (() =>
+      new Promise((resolve) => {
+        client.getMessageContent(event.message.id).then((stream) => {
+          const bufs = [];
+          stream.on("data", (chunk) => {
+            bufs.push(chunk);
+          });
+          stream.on("end", async () => {
+            resolve(Buffer.concat(bufs));
+          });
+          stream.on("error", (err) => {
+            // error handling
+          });
+        });
+      }))();
+        const tags = await ExifReader.load(imageBuffer);
         console.log(tags)
-        var dayDirectoryId = await uploadFiles(imageStream, drive, dayDirectoryId, imageName);
+        var dayDirectoryId = await uploadFiles(imageBuffer, drive, dayDirectoryId, imageName);
 
         if(index != total){
             return;
