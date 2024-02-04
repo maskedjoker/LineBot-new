@@ -8,6 +8,7 @@ import { google } from "googleapis";
 import { setTimeout } from 'timers/promises';
 import ExifReader from 'exifreader';
 import sharp from 'sharp';
+import exif from 'exif-reader';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
