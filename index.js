@@ -103,13 +103,13 @@ async function handleEvent(event) {
        await send(event, event.message.type) 
     }
 
-    const messages = [{
-        type: 'text',
-        text: 'ごいごいすー'
-    }];
-    if (event.message.text == '一斉送信') {
-        client.broadcast(messages);
-    }
+    // const messages = [{
+    //     type: 'text',
+    //     text: 'ごいごいすー'
+    // }];
+    // if (event.message.text == '一斉送信') {
+    //     client.broadcast(messages);
+    // }
     return client.replyMessage(event.replyToken, {
         type: "text",
         text: event.message.text,
