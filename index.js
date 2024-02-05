@@ -49,10 +49,7 @@ app.get("/nightNotificaton", (req, res) => {
 
 app.listen(PORT);
 
-
-async function handleEvent(event) {
-
-    if (event.message.type == "image") {
+async function send(event, type){
         var index = 100;
         var total = 100;
         if(event.message.imageSet){
@@ -77,47 +74,33 @@ async function handleEvent(event) {
             credentials: credentials,
         });
         const drive = google.drive({ version: 'v3', auth });
-        const imageName = new Date().toISOString() + '.jpg';
+        var fileExtension = type == 'image' ? '.jpg' : '.mp4';
+        const fileName = new Date().toISOString() + fileExtension;
     
         const rootDirectoryId = process.env.ROOT_DIRECTORY;
-        const monthDirectoryName = imageName.split('-')[0] + "-" + imageName.split('-')[1];
-        const dayDirectoryName = imageName.split('-')[2].split('T')[0];
+        const monthDirectoryName = fileName.split('-')[0] + "-" + fileName.split('-')[1];
+        const dayDirectoryName = fileName.split('-')[2].split('T')[0];
     
         var monthDirectoryId = await createDirectory(rootDirectoryId, monthDirectoryName, drive);
         var dayDirectoryId = await createDirectory(monthDirectoryId, dayDirectoryName, drive);
 
-        const imageStream = await client.getMessageContent(event.message.id);
-        const imageBuffer = await (() =>
-      new Promise((resolve) => {
-        client.getMessageContent(event.message.id).then((stream) => {
-          const bufs = [];
-          stream.on("data", (chunk) => {
-            bufs.push(chunk);
-          });
-          stream.on("end", async () => {
-            resolve(Buffer.concat(bufs));
-          });
-          stream.on("error", (err) => {
-            // error handling
-          });
-        });
-      }))();
-        const tags = await ExifReader.load(imageBuffer, {async: true}, {expanded: true}, {includeUnknown: true});
-        sharp(imageBuffer)
-  .metadata()
-  .then(function(metadata) {
-    console.log(exif(metadata.exif))
-  })
-        console.log(tags)
-        var dayDirectoryId = await uploadFiles(imageStream, drive, dayDirectoryId, imageName);
+        const stream = await client.getMessageContent(event.message.id);
+
+        var dayDirectoryId = await uploadFiles(stream, drive, dayDirectoryId, fileName, type);
 
         if(index != total){
             return;
         }
         return client.replyMessage(event.replyToken, {
             type: "text",
-            text: "https://drive.google.com/drive/folders/" + dayDirectoryId + "?usp=sharing" + " に画像をアップロードしました"
+            text: "https://drive.google.com/drive/folders/" + dayDirectoryId + "?usp=sharing" + " にファイルをアップロードしました"
         });
+}
+
+async function handleEvent(event) {
+
+    if (event.message.type == "image" || event.message.type == 'video') {
+        send(event, event.message.type) 
     }
 
     const messages = [{
@@ -181,18 +164,18 @@ async function createDirectory(rootDirectoryId, directoryName, drive){
     return createdDirectoryId;
 }
 
-async function uploadFiles(imageFile, drive, dayDirectoryId, imageName) {
+async function uploadFiles(stream, drive, dayDirectoryId, fileName, type) {
 
     var fileId = "";
     try {
         const image = await drive.files.create({
             resource: {
-                name: imageName, 
+                name: fileName, 
                 parents: [dayDirectoryId]
             },
             media: {
-                mimeType: 'image/jpeg', 
-                body: imageFile 
+                mimeType: type == 'image' ? 'image/jpeg' : 'video/mp4',
+                body: stream 
             },
             fields: 'id'
         });
