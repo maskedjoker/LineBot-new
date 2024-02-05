@@ -100,7 +100,7 @@ async function send(event, type){
 async function handleEvent(event) {
 
     if (event.message.type == "image" || event.message.type == 'video') {
-        send(event, event.message.type) 
+       await send(event, event.message.type) 
     }
 
     const messages = [{
