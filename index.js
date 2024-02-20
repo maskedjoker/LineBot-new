@@ -138,7 +138,7 @@ async function handleEvent(event) {
         var title = event.message.text.split(',')[1];
         var month = event.message.text.split(',')[2].split('/')[0];
         var date = event.message.text.split(',')[2].split('/')[1];
-        await listEvents(addEvents, title, month, date);
+        await addEvents(addEvents, title, month, date);
     }
 
     // const messages = [{
