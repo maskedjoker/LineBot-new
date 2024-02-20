@@ -246,8 +246,8 @@ async function listEvents(auth) {
         //   ],
         // },
       };
-      
-      calendar.events.insert({
+      const calendar = google.calendar({version: 'v3', auth});
+      await calendar.events.insert({
         auth: auth,
         calendarId: process.env.PREMITTED_EMAIL,
         resource: event,
