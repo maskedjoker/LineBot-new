@@ -102,6 +102,7 @@ async function send(event, type){
             return;
         }
         return client.broadcast({
+            type: 'text',
             text: "https://drive.google.com/drive/folders/" + dayDirectoryId + "?usp=sharing" + " にファイルがアップロードされました"
         });
 }
