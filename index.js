@@ -101,9 +101,8 @@ async function send(event, type){
         if(index != total){
             return;
         }
-        return client.replyMessage(event.replyToken, {
-            type: "text",
-            text: "https://drive.google.com/drive/folders/" + dayDirectoryId + "?usp=sharing" + " にファイルをアップロードしました"
+        return client.broadcast({
+            text: "https://drive.google.com/drive/folders/" + dayDirectoryId + "?usp=sharing" + " にファイルがアップロードされました"
         });
 }
 
