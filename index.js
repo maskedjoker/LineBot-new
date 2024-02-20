@@ -133,7 +133,13 @@ async function handleEvent(event) {
         credentials: credentials,
     });
 
-    await listEvents(auth);
+    // カレンダー,てすと,2/20
+    if(event.message.text.includes("カレンダー")){
+        var title = event.message.text.split(',')[1];
+        var month = event.message.text.split(',')[2].split('/')[0];
+        var date = event.message.text.split(',')[2].split('/')[1];
+        await listEvents(addEvents, title, month, date);
+    }
 
     // const messages = [{
     //     type: 'text',
@@ -218,17 +224,19 @@ async function uploadFiles(stream, drive, dayDirectoryId, fileName, type) {
     return dayDirectoryId;
 }
 
-async function listEvents(auth) {
+async function addEvents(auth, title, month, date) {
+    var now = new Date();
+    var year = now.getFullYear();
     const event = {
-        'summary': 'Google I/O 2015',
+        'summary': title,
         // 'location': '800 Howard St., San Francisco, CA 94103',
-        'description': 'A chance to hear more about Google\'s developer products.',
+        // 'description': 'A chance to hear more about Google\'s developer products.',
         'start': {
-          'dateTime': '2024-02-20T00:00:00.000Z',
+          'date': year + '-' + month + '-' + date,
           'timeZone': 'Asia/Tokyo',
         },
         'end': {
-          'dateTime': '2024-02-20T00:00:00.000Z',
+            'date': year + '-' + month + '-' + date,
           'timeZone': 'Asia/Tokyo',
         },
         // 'recurrence': [
