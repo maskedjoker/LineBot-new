@@ -127,7 +127,7 @@ async function handleEvent(event) {
         "client_x509_cert_url": process.env.CLIENT_X509_CRERT_URL,
         "universe_domain": "googleapis.com"
     };
-    const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
+    const SCOPES = ['https://www.googleapis.com/auth/calendar.events'];
     const auth = new google.auth.GoogleAuth({
         scopes: SCOPES,
         credentials: credentials,
@@ -219,23 +219,44 @@ async function uploadFiles(stream, drive, dayDirectoryId, fileName, type) {
 }
 
 async function listEvents(auth) {
-    const calendar = google.calendar({version: 'v3', auth});
-    const res = await calendar.events.list({
-      calendarId: 'primary',
-      timeMin: new Date().toISOString(),
-      maxResults: 10,
-      singleEvents: true,
-      orderBy: 'startTime',
-    });
-    const events = res.data.items;
-    if (!events || events.length === 0) {
-      console.log('No upcoming events found.');
-      return;
-    }
-    console.log('Upcoming 10 events:');
-    events.map((event, i) => {
-      const start = event.start.dateTime || event.start.date;
-      console.log(`${start} - ${event.summary}`);
-    });
+    const event = {
+        'summary': 'Google I/O 2015',
+        // 'location': '800 Howard St., San Francisco, CA 94103',
+        'description': 'A chance to hear more about Google\'s developer products.',
+        'start': {
+          'dateTime': '2024-02-20T00:00:00.000Z',
+          'timeZone': 'Asia/Tokyo',
+        },
+        'end': {
+          'dateTime': '2024-02-20T00:00:00.000Z',
+          'timeZone': 'Asia/Tokyo',
+        },
+        // 'recurrence': [
+        //   'RRULE:FREQ=DAILY;COUNT=2'
+        // ],
+        // 'attendees': [
+        //   {'email': 'lpage@example.com'},
+        //   {'email': 'sbrin@example.com'},
+        // ],
+        // 'reminders': {
+        //   'useDefault': false,
+        //   'overrides': [
+        //     {'method': 'email', 'minutes': 24 * 60},
+        //     {'method': 'popup', 'minutes': 10},
+        //   ],
+        // },
+      };
+      
+      calendar.events.insert({
+        auth: auth,
+        calendarId: process.env.PREMITTED_EMAIL,
+        resource: event,
+      }, function(err, event) {
+        if (err) {
+          console.log('There was an error contacting the Calendar service: ' + err);
+          return;
+        }
+        console.log('Event created: %s', event.htmlLink);
+      });
   }
   
