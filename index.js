@@ -101,7 +101,7 @@ async function send(event, type){
         if(index != total){
             return;
         }
-        return client.broadcast({
+        return client.replyMessage(event.replyToken, {
             type: 'text',
             text: "https://drive.google.com/drive/folders/" + dayDirectoryId + "?usp=sharing" + " にファイルがアップロードされました"
         });
