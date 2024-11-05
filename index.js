@@ -43,11 +43,12 @@ app.get("/", (req, res) => {
 
 
 app.get("/nightNotificaton", (req, res) => {
-    const envYear = process.env.YEAR
-    const envMonth = process.env.MONTH
-    const envDay = process.env.DAY
-    const now = new Date().getTimezoneOffset() + (9 * 60) * 60 * 1000
-    const goal = new Date(envYear, envMonth, envDay).getTimezoneOffset() + (9 * 60) * 60 * 1000
+    const envYear = process.env.YEAR;
+    const envMonth = process.env.MONTH;
+    const envDay = process.env.DAY;
+    const timezoneOffset = new Date().getTimezoneOffset() + (9 * 60) * 60 * 1000;
+    const now = new Date(new Date().getTime() + timezoneOffset);
+    const goal = new Date(new Date(envYear, envMonth, envDay) + timezoneOffset);
 
     const restMillisecond = goal.getTime() - now.getTime();
     const day = Math.floor(restMillisecond / 1000 / 60 / 60 / 24);
