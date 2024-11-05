@@ -43,10 +43,19 @@ app.get("/", (req, res) => {
 
 
 app.get("/nightNotificaton", (req, res) => {
+    const envYear = process.env.YEAR
+    const envMonth = process.env.MONTH
+    const envDay = process.env.DAY
+    const now = new Date().getTimezoneOffset() + (9 * 60) * 60 * 1000
+    const goal = new Date(envYear, envMonth, envDay).getTimezoneOffset() + (9 * 60) * 60 * 1000
+
+    const restMillisecond = goal.getTime() - now.getTime();
+    const day = Math.floor(restMillisecond / 1000 / 60 / 60 / 24);
+    
     try{
         const messages = [{
             type: 'text',
-            text: '22:30になりました。米国株取引開始のお時間です。'
+            text: '22:30になりました。米国株取引開始のお時間です。💞結婚式まであと' + day + '日です💒'
         }];
         client.broadcast(messages);
         console.log("ログ定期実行")
