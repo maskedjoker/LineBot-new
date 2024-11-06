@@ -47,8 +47,11 @@ app.get("/nightNotificaton", (req, res) => {
     const envMonth = process.env.MONTH;
     const envDay = process.env.DAY;
     const timezoneOffset = new Date().getTimezoneOffset() + (9 * 60) * 60 * 1000;
+    console.log("オフセット" + timezoneOffset);
     const now = new Date(new Date().getTime() + timezoneOffset);
+    console.log("現在時刻" + now);
     const goal = new Date(new Date(envYear, envMonth, envDay) + timezoneOffset);
+    console.log("目標時刻" + goal);
 
     const restMillisecond = goal.getTime() - now.getTime();
     const day = Math.floor(restMillisecond / 1000 / 60 / 60 / 24);
