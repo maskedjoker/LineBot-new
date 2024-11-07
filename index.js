@@ -55,7 +55,7 @@ app.get("/nightNotificaton", (req, res) => {
 
     const restMillisecond = goal.getTime() - now.getTime();
     console.log("差分ms"+restMillisecond);
-    const day = Math.floor(restMillisecond / 1000 / 60 / 60 / 24);
+    const day = Math.round(restMillisecond / 1000 / 60 / 60 / 24);
     
     try{
         const messages = [{
