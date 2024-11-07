@@ -55,7 +55,7 @@ app.get("/nightNotificaton", (req, res) => {
 
     const restMillisecond = goal.getTime() - now.getTime();
     console.log("差分ms"+restMillisecond);
-    const day = Math.round(restMillisecond / 1000 / 60 / 60 / 24 + timezoneOffset);
+    const day = Math.round(restMillisecond / 1000 / 60 / 60 / 24 + 1);
     
     try{
         const texts = ['22:30になりました。米国株取引開始のお時間です。'];
