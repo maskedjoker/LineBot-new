@@ -60,7 +60,7 @@ app.get("/nightNotificaton", (req, res) => {
     try{
         const messages = [{
             type: 'text',
-            text: '22:30になりました。米国株取引開始のお時間です。¥n💞結婚式まであと' + day + '日です💒'
+            text: "22:30になりました。米国株取引開始のお時間です。¥n💞結婚式まであと" + day + "日です💒"
         }];
         client.broadcast(messages);
         console.log("ログ定期実行")
