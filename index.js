@@ -58,7 +58,7 @@ app.get("/nightNotificaton", (req, res) => {
     const day = Math.round(restMillisecond / 1000 / 60 / 60 / 24 + 1);
     
     try{
-        const texts = ['22:30になりました。米国株取引開始のお時間です。'];
+        const texts = ['09:00になりました。今日も1日頑張りましょう💪'];
         texts.push('💞結婚式まであと' + day + '日です💒');
         const text = texts.join('\n');
         const messages = [{
